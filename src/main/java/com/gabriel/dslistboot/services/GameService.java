@@ -3,6 +3,7 @@ package com.gabriel.dslistboot.services;
 import com.gabriel.dslistboot.dto.GameDTO;
 import com.gabriel.dslistboot.dto.GameMinDTO;
 import com.gabriel.dslistboot.entities.Game;
+import com.gabriel.dslistboot.projections.GameMinProjection;
 import com.gabriel.dslistboot.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,13 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll() {
         List<Game> result = gameRepository.findAll();
-        List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
-        return dto;
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId) {
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
+
     }
 }
